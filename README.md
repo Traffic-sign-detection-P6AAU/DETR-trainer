@@ -1,3 +1,3 @@
 # P6
 
-top nice
+top nice nice
