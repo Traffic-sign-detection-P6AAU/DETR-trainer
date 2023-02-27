@@ -1,5 +1,5 @@
-import requests
 import time
+import requests
 import base64
 import xml.etree.ElementTree as ET
 
@@ -10,43 +10,38 @@ b64 = base64_bytes.decode("utf-8")
 
 response = requests.get("https://distribution.dataudveksler.app.vd.dk/api/dataset/61/latest/DatexII", headers={"Authorization": f"Basic {b64}"})
 xml = ET.fromstring(response.text)
-# root = xml.getroot()
 
-cameralist = xml.findall("d2LogicalModel/payloadPublication/genericPublicationExtension/CctvSiteTablePublication/cctvCameraList/cctvCameraMetadataRecord")
+cameralist = xml[1][3][0][1]
 
-# i = xml[0][1][3][0][1]
-# xml
-# cameralist = i.findall(".//cctvCameraMetadataRecord")
+j = 0
+for cctvCameraMetadataRecord in cameralist:
+    for elem in cctvCameraMetadataRecord:
+        if elem.tag == "{http://datex2.eu/schema/2/2_0}cctvStillImageService":
+                url = elem[2][0].text
+                print("url: " + url)
 
-print(len(cameralist))
+                # Number of images to download from each camera
+                num_images = 2
 
-urls = []
-for camera in cameralist:
-    print(camera.text)
-    urls.append(camera)
+                # Directory to save the images to
+                directory = "data/images/"
 
-print(urls)
-# Number of images to download
-# num_images = 10000
+                # Create the directory if it does not exist
+                import os
+                os.makedirs(directory, exist_ok=True)
 
-# # Directory to save the images to
-# directory = "data/images/"
+                # Loop over the number of images to download
+                for i in range(num_images):
+                    # Fetch the image from the API endpoint
+                    response = requests.get(url)
 
-# # Create the directory if it does not exist
-# import os
-# os.makedirs(directory, exist_ok=True)
+                    # Generate a filename for the image
+                    filename = f"{directory}camera_{j}_image_{i+1}.jpg"
 
-# # Loop over the number of images to download
-# for i in range(num_images):
-#     # Fetch the image from the API endpoint
-#     response = requests.get(urls[0])
+                    # Save the image to the specified directory
+                    with open(filename, "wb") as f:
+                        f.write(response.content)
 
-#     # Generate a filename for the image
-#     filename = f"{directory}image_{i+1}.jpg"
-
-#     # Save the image to the specified directory
-#     with open(filename, "wb") as f:
-#         f.write(response.content)
-
-#     # Wait for 20 seconds before fetching the next image
-#     time.sleep(20)
+                    # Wait for 20 seconds before fetching the next image
+                    time.sleep(20)
+                j += 1
