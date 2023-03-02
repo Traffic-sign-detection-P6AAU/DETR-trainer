@@ -4,10 +4,11 @@ from torch import nn
 from torch.utils.data import DataLoader
 from torchvision import datasets
 from torchvision.transforms import ToTensor
-import pandas as pd
+# import pandas as pd
 import time
 
-if not os.path.exists('training-datasets\VOCdevkit'):
+if not os.path.exists('training-datasets'):
+    os.mkdir('training-datasets')
     os.system("start /wait cmd /c \"curl \"http://host.robots.ox.ac.uk/pascal/VOC/voc2012/VOCtrainval_11-May-2012.tar\" --output training-datasets\\voc12.tar\"")
     os.chdir("training-datasets")
     os.system("start /wait cmd /c \"tar -xf voc12.tar\"")
