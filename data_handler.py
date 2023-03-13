@@ -1,15 +1,5 @@
 import os
-#import torch
 import torchvision
-#from torch import nn
-#from torch.utils.data import DataLoader
-#from torchvision import datasets
-#from torchvision.transforms import ToTensor
-#from torch.utils.data import Dataset
-from torchvision import datasets
-#import time
-#import pandas as pd
-#from torchvision import transforms as pth_transforms
 from sklearn.model_selection import train_test_split
 import random
 import shutil
