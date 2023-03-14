@@ -1,20 +1,11 @@
 import os
-#import torch
 import torchvision
-#from torch import nn
-#from torch.utils.data import DataLoader
-#from torchvision import datasets
-#from torchvision.transforms import ToTensor
-#from torch.utils.data import Dataset
-from torchvision import datasets
-#import time
-#import pandas as pd
-#from torchvision import transforms as pth_transforms
 from sklearn.model_selection import train_test_split
 import random
 import shutil
 
 def download_dataset():
+    os.makedirs("training-datasets", exist_ok=True)
     os.system("start /wait cmd /c \"curl \"http://host.robots.ox.ac.uk/pascal/VOC/voc2012/VOCtrainval_11-May-2012.tar\" --output training-datasets\\voc12.tar\"")
     os.chdir("training-datasets")
     os.system("start /wait cmd /c \"tar -xf voc12.tar\"")
@@ -53,11 +44,12 @@ def split_dataset(data_dir, split_ratio=0.8):
     print("Number of training images:", len(train_image_filenames))
     print("Number of test images:", len(test_image_filenames))
 
-if not os.path.exists('training-datasets\VOCdevkit'):
-    download_dataset()
+def get_data():
+    if not os.path.exists('training-datasets\VOCdevkit'):
+        download_dataset()
 
-if not os.path.exists('training-datasets/VOCdevkit/VOC2012/test'):
-    split_dataset("training-datasets/VOCdevkit/VOC2012")
+    if not os.path.exists('training-datasets/VOCdevkit/VOC2012/test'):
+        split_dataset("training-datasets/VOCdevkit/VOC2012")
 
 '''
 transform = pth_transforms.Compose(
