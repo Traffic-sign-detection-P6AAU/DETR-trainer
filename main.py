@@ -1,4 +1,3 @@
-import os
 import data_handler
 
 def main():
