@@ -1,7 +1,6 @@
 import data_handler
 
 def main():
-    print("ffgfgf")
     data_handler.get_data()
 
 
