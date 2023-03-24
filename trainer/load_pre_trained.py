@@ -2,9 +2,9 @@ import torch
 from transformers import DetrForObjectDetection, DetrImageProcessor
 import cv2
 import supervision as sv
+from trainer.settings import CHECKPOINT
 
 DEVICE = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-CHECKPOINT = 'facebook/detr-resnet-50'
 CONFIDENCE_TRESHOLD = 0.5
 IOU_TRESHOLD = 0.5
 

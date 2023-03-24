@@ -3,6 +3,7 @@ import random
 import torchvision
 import cv2
 import supervision as sv
+from torch.utils.data import DataLoader
 
 # settings
 ANNOTATION_FILE_NAME = "_annotations.coco.json"
@@ -32,41 +33,63 @@ def load_datasets(image_processor):
 
             return pixel_values, target
 
-
-    TRAIN_DATASET = CocoDetection(
+    train_dataset = CocoDetection(
         image_directory_path=TRAIN_DIRECTORY,
         image_processor=image_processor,
         train=True)
-    VAL_DATASET = CocoDetection(
+    val_dataset = CocoDetection(
         image_directory_path=VAL_DIRECTORY,
         image_processor=image_processor,
         train=False)
-    TEST_DATASET = CocoDetection(
+    test_dataset = CocoDetection(
         image_directory_path=TEST_DIRECTORY,
         image_processor=image_processor,
         train=False)
+    
+    #print("Number of training examples:", len(train_dataset))
+    #print("Number of validation examples:", len(val_dataset))
+    #print("Number of test examples:", len(test_dataset))
 
-    print("Number of training examples:", len(TRAIN_DATASET))
-    print("Number of validation examples:", len(VAL_DATASET))
-    print("Number of test examples:", len(TEST_DATASET))
+    return train_dataset, val_dataset, test_dataset
 
-def show_img_from_data():
+
+def get_dataloaders(image_processor, train_dataset, val_dataset, test_dataset):
+    def collate_fn(batch):
+        # DETR authors employ various image sizes during training, making it not possible 
+        # to directly batch together images. Hence they pad the images to the biggest 
+        # resolution in a given batch, and create a corresponding binary pixel_mask 
+        # which indicates which pixels are real/which are padding
+        pixel_values = [item[0] for item in batch]
+        encoding = image_processor.pad(pixel_values, return_tensors="pt")
+        labels = [item[1] for item in batch]
+        return {
+            'pixel_values': encoding['pixel_values'],
+            'pixel_mask': encoding['pixel_mask'],
+            'labels': labels
+        }
+
+    train_dataloader = DataLoader(dataset=train_dataset, collate_fn=collate_fn, batch_size=4, shuffle=True)
+    val_dataloader = DataLoader(dataset=val_dataset, collate_fn=collate_fn, batch_size=4)
+    test_dataloader = DataLoader(dataset=test_dataset, collate_fn=collate_fn, batch_size=4)
+    return train_dataloader, val_dataloader, test_dataloader
+
+def show_img_from_data(train_dataset, test_dataset):
     # select random image
-    image_ids = TRAIN_DATASET.coco.getImgIds()
+    image_ids = test_dataset.coco.getImgIds()
     image_id = random.choice(image_ids)
     print('Image #{}'.format(image_id))
 
     # load image and annotatons 
-    image = TRAIN_DATASET.coco.loadImgs(image_id)[0]
-    annotations = TRAIN_DATASET.coco.imgToAnns[image_id]
-    image_path = os.path.join(TRAIN_DATASET.root, image['file_name'])
+    image = test_dataset.coco.loadImgs(image_id)[0]
+    annotations = train_dataset.coco.imgToAnns[image_id]
+    image_path = os.path.join(train_dataset.root, image['file_name'])
     image = cv2.imread(image_path)
 
     # annotate
     detections = sv.Detections.from_coco_annotations(coco_annotation=annotations)
 
     # we will use id2label function for training
-    categories = TRAIN_DATASET.coco.cats
+    categories = train_dataset.coco.cats
     id2label = {k: v['name'] for k,v in categories.items()}
 
     labels = [
