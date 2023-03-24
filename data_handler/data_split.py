@@ -4,10 +4,9 @@ import shutil
 import json
 
 
-def split_dataset():
-    target_dir = os.path.join('Datasets')
-    source_dir = os.path.join('data_handler', 'JPEGImages')
+def split_dataset(source_dir):
     # Create directories for train, test and val sets
+    target_dir = os.path.join('Datasets')
     train_dir = os.path.join(target_dir, 'train')
     test_dir = os.path.join(target_dir, 'test')
     val_dir = os.path.join(target_dir, 'val')
