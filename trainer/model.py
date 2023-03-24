@@ -5,10 +5,9 @@ from trainer.settings import CHECKPOINT
 
 class Detr(pl.LightningModule):
 
-    def __init__(self, lr, lr_backbone, weight_decay):
+    def __init__(self, lr, lr_backbone, weight_decay, id2label):
         super().__init__()
-        categories = TRAIN_DATASET.coco.cats
-        id2label = {k: v['name'] for k,v in categories.items()}
+
         self.model = DetrForObjectDetection.from_pretrained(
             pretrained_model_name_or_path=CHECKPOINT,
             num_labels=len(id2label),
@@ -65,9 +64,3 @@ class Detr(pl.LightningModule):
             },
         ]
         return torch.optim.AdamW(param_dicts, lr=self.lr, weight_decay=self.weight_decay)
-
-    def train_dataloader(self):
-        return TRAIN_DATALOADER
-
-    def val_dataloader(self):
-        return VAL_DATALOADER

@@ -89,11 +89,8 @@ def show_img_from_data(train_dataset, test_dataset):
     detections = sv.Detections.from_coco_annotations(coco_annotation=annotations)
 
     # we will use id2label function for training
-    categories = train_dataset.coco.cats
-    id2label = {k: v['name'] for k,v in categories.items()}
-
     labels = [
-        f"{id2label[class_id]}" 
+        f"{get_id2label(train_dataset)[class_id]}" 
         for _, _, class_id, _
         in detections
     ]
@@ -102,3 +99,7 @@ def show_img_from_data(train_dataset, test_dataset):
     frame = box_annotator.annotate(scene=image, detections=detections, labels=labels)
 
     sv.show_frame_in_notebook(image, (16, 16))
+
+def get_id2label(train_dataset):
+    categories = train_dataset.coco.cats
+    return {k: v['name'] for k,v in categories.items()}
