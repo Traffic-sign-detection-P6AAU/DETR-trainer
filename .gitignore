@@ -1,6 +1,7 @@
 # Ignore datasets
 training-datasets/
 test-datasets/
+JPEGImages/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
