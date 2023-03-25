@@ -72,4 +72,4 @@ def split_dataset(source_dir):
 
     print("Number of test images:", len(test_image_filenames))
     print("Number of validation images:", len(val_image_filenames))
-    print("Number of training images:", len(all_image_filenames) - len(test_image_filenames) - len(val_image_filenames))
+    print("Number of training images:", len(train_image_filenames))
