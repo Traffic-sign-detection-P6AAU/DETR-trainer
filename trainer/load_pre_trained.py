@@ -16,7 +16,7 @@ def show_img_from_pre_dataset(image_processor, model): # disable gradient calcul
     with torch.no_grad():
 
         # load image and predict
-        image = cv2.imread("test_imgs/dog.jpeg")
+        image = cv2.imread("../Datasets/train/0000003.jpg")
         inputs = image_processor(images=image, return_tensors='pt').to(DEVICE)
         outputs = model(**inputs)
 

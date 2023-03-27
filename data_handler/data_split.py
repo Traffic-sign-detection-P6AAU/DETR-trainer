@@ -9,7 +9,7 @@ def split_dataset(source_dir):
     target_dir = os.path.join('Datasets')
     train_dir = os.path.join(target_dir, 'train')
     test_dir = os.path.join(target_dir, 'test')
-    val_dir = os.path.join(target_dir, 'val')
+    val_dir = os.path.join(target_dir, 'valid')
     os.makedirs(train_dir, exist_ok=True)
     os.makedirs(test_dir, exist_ok=True)
     os.makedirs(val_dir, exist_ok=True)

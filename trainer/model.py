@@ -4,16 +4,16 @@ from transformers import DetrForObjectDetection
 from trainer.settings import CHECKPOINT
 
 class Detr(pl.LightningModule):
-
-    def __init__(self, lr, lr_backbone, weight_decay, id2label):
+    def __init__(self, lr, lr_backbone, weight_decay, train_load, val_load, id2label):
         super().__init__()
-
+        
         self.model = DetrForObjectDetection.from_pretrained(
             pretrained_model_name_or_path=CHECKPOINT,
             num_labels=len(id2label),
             ignore_mismatched_sizes=True
         )
-        
+        self.train_load = train_load
+        self.val_load = val_load
         self.lr = lr
         self.lr_backbone = lr_backbone
         self.weight_decay = weight_decay
@@ -64,3 +64,9 @@ class Detr(pl.LightningModule):
             },
         ]
         return torch.optim.AdamW(param_dicts, lr=self.lr, weight_decay=self.weight_decay)
+    
+    def train_dataloader(self):
+        return self.train_load
+
+    def val_dataloader(self):
+        return self.val_load

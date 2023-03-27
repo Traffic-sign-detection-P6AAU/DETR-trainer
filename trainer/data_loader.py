@@ -4,12 +4,13 @@ import torchvision
 import cv2
 import supervision as sv
 from torch.utils.data import DataLoader
+from trainer.settings import DATASET_PATH
 
 # settings
 ANNOTATION_FILE_NAME = "_annotations.coco.json"
-TRAIN_DIRECTORY = os.path.join("JPEGImages", "train")
-VAL_DIRECTORY = os.path.join("JPEGImages", "valid")
-TEST_DIRECTORY = os.path.join("JPEGImages", "test")
+TRAIN_DIRECTORY = os.path.join(DATASET_PATH, "train")
+VAL_DIRECTORY = os.path.join(DATASET_PATH, "valid")
+TEST_DIRECTORY = os.path.join(DATASET_PATH, "test")
 
 def load_datasets(image_processor):
     class CocoDetection(torchvision.datasets.CocoDetection):
@@ -46,12 +47,11 @@ def load_datasets(image_processor):
         image_processor=image_processor,
         train=False)
     
-    #print("Number of training examples:", len(train_dataset))
-    #print("Number of validation examples:", len(val_dataset))
-    #print("Number of test examples:", len(test_dataset))
+    print("Number of training examples:", len(train_dataset))
+    print("Number of validation examples:", len(val_dataset))
+    print("Number of test examples:", len(test_dataset))
 
     return train_dataset, val_dataset, test_dataset
-
 
 def get_dataloaders(image_processor, train_dataset, val_dataset, test_dataset):
     def collate_fn(batch):
