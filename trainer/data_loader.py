@@ -4,8 +4,7 @@ import torchvision
 import cv2
 import supervision as sv
 from torch.utils.data import DataLoader
-from trainer.settings import DATASET_PATH
-
+from trainer.settings import DATASET_PATH, BATCH_SIZE
 # settings
 ANNOTATION_FILE_NAME = "_annotations.coco.json"
 TRAIN_DIRECTORY = os.path.join(DATASET_PATH, "train")
@@ -68,9 +67,9 @@ def get_dataloaders(image_processor, train_dataset, val_dataset, test_dataset):
             'labels': labels
         }
 
-    train_dataloader = DataLoader(dataset=train_dataset, collate_fn=collate_fn, batch_size=4, shuffle=True)
-    val_dataloader = DataLoader(dataset=val_dataset, collate_fn=collate_fn, batch_size=4)
-    test_dataloader = DataLoader(dataset=test_dataset, collate_fn=collate_fn, batch_size=4)
+    train_dataloader = DataLoader(dataset=train_dataset, collate_fn=collate_fn, batch_size=BATCH_SIZE, shuffle=True)
+    val_dataloader = DataLoader(dataset=val_dataset, collate_fn=collate_fn, batch_size=BATCH_SIZE)
+    test_dataloader = DataLoader(dataset=test_dataset, collate_fn=collate_fn, batch_size=BATCH_SIZE)
     return train_dataloader, val_dataloader, test_dataloader
 
 def show_img_from_data(train_dataset, test_dataset):

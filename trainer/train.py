@@ -1,7 +1,8 @@
 import torch
 from pytorch_lightning import Trainer
+from pytorch_lightning.loggers import TensorBoardLogger
 from trainer.model import Detr
-from trainer.settings import MAX_EPOCHS, MODEL_PATH
+from trainer.settings import MAX_EPOCHS
 
 DEVICE = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     
@@ -14,9 +15,8 @@ def start_training(train_dataloader, val_dataloader, id2label):
     # pytorch_lightning < 2.0.0
     # trainer = Trainer(gpus=1, max_epochs=MAX_EPOCHS, gradient_clip_val=0.1, accumulate_grad_batches=8, log_every_n_steps=5)
     # pytorch_lightning >= 2.0.0
-    trainer = Trainer(devices=1, accelerator="gpu", max_epochs=MAX_EPOCHS, gradient_clip_val=0.1, accumulate_grad_batches=8, log_every_n_steps=5)
+    logger = TensorBoardLogger("tb_logs", name="P6_model")
+    trainer = Trainer(devices=1, accelerator="gpu", logger=logger, max_epochs=MAX_EPOCHS, gradient_clip_val=0.1, accumulate_grad_batches=8, log_every_n_steps=1)
     trainer.fit(model)
+    # Create a TensorBoard callback
     return model.to(DEVICE)
-
-def save_model(model):
-    model.model.save_pretrained(MODEL_PATH)

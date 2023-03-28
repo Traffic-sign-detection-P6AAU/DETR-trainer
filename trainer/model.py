@@ -1,7 +1,7 @@
 import torch
 import pytorch_lightning as pl
-from transformers import DetrForObjectDetection
-from trainer.settings import CHECKPOINT
+from transformers import DetrForObjectDetection, DetrImageProcessor
+from trainer.settings import CHECKPOINT, MODEL_PATH
 
 class Detr(pl.LightningModule):
     def __init__(self, lr, lr_backbone, weight_decay, train_load, val_load, id2label):
@@ -70,3 +70,14 @@ class Detr(pl.LightningModule):
 
     def val_dataloader(self):
         return self.val_load
+
+def save_model(model):
+    model.model.save_pretrained(MODEL_PATH)
+
+def get_model(path):
+    device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+    model = DetrForObjectDetection.from_pretrained(path)
+    return model.to(device)
+
+def get_img_processor():
+    return DetrImageProcessor.from_pretrained(CHECKPOINT)

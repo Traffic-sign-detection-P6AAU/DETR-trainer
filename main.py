@@ -1,17 +1,27 @@
-from trainer.load_pre_trained import load_dataset, show_img_from_pre_dataset
+from trainer.img_show import show_img_w_prediction, show_model_prediction
 from trainer.data_loader import load_datasets, get_dataloaders, get_id2label
-from trainer.train import start_training, save_model
-from trainer.test_model import show_model_prediction
+from trainer.train import start_training
+from trainer.model import save_model, get_model, get_img_processor
+from trainer.settings import CHECKPOINT, MODEL_PATH
 
 def main():
-    image_processor, pre_model = load_dataset()
-    #show_img_from_pre_dataset(image_processor, pre_model)
-    train_dataset, val_dataset, test_dataset = load_datasets(image_processor)
-   
-    train_dataloader, val_dataloader, test_dataloader = get_dataloaders(image_processor, train_dataset, val_dataset, test_dataset)
-    trained_model = start_training(train_dataloader, val_dataloader, get_id2label(train_dataset))
-    save_model(trained_model)
-    #show_model_prediction(test_dataset, image_processor, trained_model)
+    print("Type 1 to train the model or type 2 to use the model: ")
+    choice = input()
+    if choice == "1":
+        image_processor = get_img_processor()
+        pre_model = get_model(CHECKPOINT)
+        show_img_w_prediction(image_processor, pre_model)
+        train_dataset, val_dataset, test_dataset = load_datasets(image_processor)
+        train_dataloader, val_dataloader, test_dataloader = get_dataloaders(image_processor, train_dataset, val_dataset, test_dataset)
+        trained_model = start_training(train_dataloader, val_dataloader, get_id2label(train_dataset))
+        #show_model_prediction(test_dataset, image_processor, trained_model)
+        save_model(trained_model)
+    elif choice == "2":
+        image_processor = get_img_processor()
+        model = get_model(MODEL_PATH)
+        show_img_w_prediction(image_processor, model)
+    else:
+        print("Input was not 1 or 2.")
 
 if __name__ == "__main__":
     main()
