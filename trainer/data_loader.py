@@ -4,7 +4,7 @@ import torchvision
 import cv2
 import supervision as sv
 from torch.utils.data import DataLoader
-from trainer.settings import DATASET_PATH, BATCH_SIZE
+from trainer.settings import DATASET_PATH, BATCH_SIZE, NUM_WORKERS
 # settings
 ANNOTATION_FILE_NAME = "_annotations.coco.json"
 TRAIN_DIRECTORY = os.path.join(DATASET_PATH, "train")
@@ -45,7 +45,7 @@ def load_datasets(image_processor):
         image_directory_path=TEST_DIRECTORY,
         image_processor=image_processor,
         train=False)
-    
+
     print("Number of training examples:", len(train_dataset))
     print("Number of validation examples:", len(val_dataset))
     print("Number of test examples:", len(test_dataset))
@@ -67,10 +67,19 @@ def get_dataloaders(image_processor, train_dataset, val_dataset, test_dataset):
             'labels': labels
         }
 
-    train_dataloader = DataLoader(dataset=train_dataset, collate_fn=collate_fn, batch_size=BATCH_SIZE, shuffle=True)
-    val_dataloader = DataLoader(dataset=val_dataset, collate_fn=collate_fn, batch_size=BATCH_SIZE)
-    test_dataloader = DataLoader(dataset=test_dataset, collate_fn=collate_fn, batch_size=BATCH_SIZE)
+    train_dataloader = make_dataloader(train_dataset, collate_fn)
+    train_dataloader.shuffle = True
+    val_dataloader = make_dataloader(val_dataset, collate_fn)
+    test_dataloader = make_dataloader(test_dataset, collate_fn)
     return train_dataloader, val_dataloader, test_dataloader
+
+def make_dataloader(dataset, cool_fn):
+    return DataLoader(
+        dataset=dataset,
+        collate_fn=cool_fn,
+        pin_memory=True,
+        num_workers=NUM_WORKERS,
+        batch_size=BATCH_SIZE)
 
 def show_img_from_data(train_dataset, test_dataset):
     # select random image

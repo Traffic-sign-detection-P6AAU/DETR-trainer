@@ -10,7 +10,7 @@ def show_img_w_prediction(image_processor, model): # disable gradient calculatio
     with torch.no_grad():
 
         # load image and predict
-        image = cv2.imread("../Datasets/trafikSigns/test/0003743.jpg")
+        image = cv2.imread("../Datasets/trafikSigns/test/0005952.jpg")
         inputs = image_processor(images=image, return_tensors='pt').to(DEVICE)
         outputs = model(**inputs)
 

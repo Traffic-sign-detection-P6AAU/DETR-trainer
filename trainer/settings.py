@@ -1,7 +1,12 @@
 DATASET_PATH = "../Datasets/trafikSigns/"
-CHECKPOINT = "facebook/detr-resnet-50"
 MAX_EPOCHS = 50
-BATCH_SIZE = 32
-CONFIDENCE_TRESHOLD = 0.5
-IOU_TRESHOLD = 0.5
+BATCH_SIZE = 4
+ACCUMULATE_GRAD_BATCHES = 8
+LEARN_RATE = 0.00006 # Learning rate
+LEARN_RATE_BACKBONE = 0.000006 # Learning rate backbone
+WEIGHT_DECAY = 0.0003
+CONFIDENCE_TRESHOLD = 0.05
+IOU_TRESHOLD = 0.05
 MODEL_PATH = "custom-model"
+NUM_WORKERS = 20 # Recommended to num of cores
+CHECKPOINT = "facebook/detr-resnet-50"
