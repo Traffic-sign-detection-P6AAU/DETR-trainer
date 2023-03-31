@@ -2,14 +2,16 @@ import os
 import json
 import cv2
 
-IMGS_PATH = "C:/Users/Jakob/Downloads/mix/mixed-data/"
+IMGS_PATH = "mixed-data/"
 CATEGORIES_PATH = "data_handler/accepted_categories.json"
 BBOX_MARGIN = 5
 
 def save_annotations():
-    imgs, annos = make_imgs_annos()
+    categories = load_json(CATEGORIES_PATH)["categories"]
+    imgs, annos = make_imgs_annos(categories)
     annotations = {
         "images": imgs,
+        "categories": categories,
         "annotations": annos
     }
     save_json(annotations)
@@ -22,11 +24,10 @@ def save_json(data):
     with open('_annotations.coco.json', 'w', encoding='utf-8') as f:
         json.dump(data, f)
 
-def make_imgs_annos():
+def make_imgs_annos(categories):
     img_id = 0
     images = []
     annotations = []
-    categories = load_json(CATEGORIES_PATH)["categories"]
     for directory in os.listdir(IMGS_PATH):
         dtr_path = os.path.join(IMGS_PATH, directory)
         category_id = get_id_from_dir(categories, directory)
