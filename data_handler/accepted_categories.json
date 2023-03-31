@@ -1,0 +1,84 @@
+{
+    "categories": [
+        {
+            "id": 52,
+            "foldername": "speed-30",
+            "name": "speed_30"
+        },
+        {
+            "id": 53,
+            "foldername": "speed-40",
+            "name": "speed_40"
+        },
+        {
+            "id": 54,
+            "foldername": "speed-50",
+            "name": "speed_50"
+        },
+        {
+            "id": 55,
+            "foldername": "speed-60",
+            "name": "speed_60"
+        },
+        {
+            "id": 56,
+            "foldername": "speed-70",
+            "name": "speed_70"
+        },
+        {
+            "id": 201,
+            "foldername": "speed-80",
+            "name": "speed_80"
+        },
+        {
+            "id": 202,
+            "foldername": "speed-100",
+            "name": "speed_100"
+        },
+        {
+            "id": 203,
+            "foldername": "speed-120",
+            "name": "speed_120"
+        },
+        {
+            "id": 59,
+            "foldername": "no-parking-and-stopping",
+            "name": "no_parking_and_stopping"
+        },
+        {
+            "id": 60,
+            "foldername": "no-parking",
+            "name": "no_parking"
+        },
+        {
+            "id": 104,
+            "foldername": "speed-40-ending",
+            "name": "speed_limit_40_ending"
+        },
+        {
+            "id": 105,
+            "foldername": "speed-50-ending",
+            "name": "speed_limit_50_ending"
+        },
+        {
+            "id": 106,
+            "foldername": "speed-60-ending",
+            "name": "speed_limit_60_ending"
+        },
+        {
+            "id": 107,
+            "foldername": "speed-70-ending",
+            "name": "speed_limit_70_ending"
+        },
+        {
+            "id": 204,
+            "foldername": "speed-80-ending",
+            "name": "speed_limit_80_ending"
+        },
+        {
+            "id": 112,
+            "foldername": "all-ending",
+            "name": "all_restrictions_ending"
+        }
+    ]
+}

@@ -14,9 +14,9 @@ TEST_DIRECTORY = os.path.join(DATASET_PATH, "test")
 def load_datasets(image_processor):
     class CocoDetection(torchvision.datasets.CocoDetection):
         def __init__(
-            self, 
-            image_directory_path: str, 
-            image_processor, 
+            self,
+            image_directory_path: str,
+            image_processor,
             train: bool = True
         ):
             annotation_file_path = os.path.join(image_directory_path, ANNOTATION_FILE_NAME)
