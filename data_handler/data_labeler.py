@@ -2,9 +2,19 @@ import os
 import json
 import cv2
 
-IMGS_PATH = "mixed-data/"
+IMGS_PATH = "mixed-data"
 CATEGORIES_PATH = "data_handler/accepted_categories.json"
+MERGE_DATASET_PATH = "_annotations.coco.json"
 BBOX_MARGIN = 5
+
+def extend_annotations():
+    categories = load_json(CATEGORIES_PATH)["categories"]
+    imgs, annos = make_imgs_annos(categories)
+    merge_dataset = load_json(MERGE_DATASET_PATH)
+    merge_dataset["images"].extend(imgs)
+    merge_dataset["annotations"].extend(annos)
+    merge_dataset["categories"] = (categories)
+    save_json(merge_dataset)
 
 def save_annotations():
     categories = load_json(CATEGORIES_PATH)["categories"]
@@ -25,7 +35,7 @@ def save_json(data):
         json.dump(data, f)
 
 def make_imgs_annos(categories):
-    img_id = 0
+    img_id = 20000
     images = []
     annotations = []
     for directory in os.listdir(IMGS_PATH):
@@ -43,17 +53,17 @@ def make_imgs_annos(categories):
 def get_bbox(img_size):
     left = BBOX_MARGIN
     top = BBOX_MARGIN
-    right = img_size[1] - BBOX_MARGIN
-    bottom = img_size[0] - BBOX_MARGIN
+    right = img_size[1] - (BBOX_MARGIN * 2)
+    bottom = img_size[0] - (BBOX_MARGIN * 2)
     return [left, top, right, bottom]
 
 def darw_bbox(path):
     image = cv2.imread(path)
     height, width, c = image.shape
-    left = 5
-    top = 5
-    right = width - 5
-    bottom = height - 5
+    left = 35
+    top = 24
+    right = 108
+    bottom = 96
     cv2.rectangle(image, (left, top), (right, bottom), (0, 0, 255), 1)
     cv2.imwrite('example_bbox.jpg', image)
 
