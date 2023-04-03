@@ -1,6 +1,6 @@
 import os
-import json
 import cv2
+from shared import load_json, save_json
 
 IMGS_PATH = "mixed-data"
 CATEGORIES_PATH = "data_handler/accepted_categories.json"
@@ -14,7 +14,7 @@ def extend_annotations():
     merge_dataset["images"].extend(imgs)
     merge_dataset["annotations"].extend(annos)
     merge_dataset["categories"] = (categories)
-    save_json(merge_dataset)
+    save_json(merge_dataset, MERGE_DATASET_PATH)
 
 def save_annotations():
     categories = load_json(CATEGORIES_PATH)["categories"]
@@ -24,18 +24,11 @@ def save_annotations():
         "categories": categories,
         "annotations": annos
     }
-    save_json(annotations)
+    save_json(annotations, MERGE_DATASET_PATH)
 
-def load_json(path):
-    with open(path, "r", encoding='utf-8') as f:
-        return json.load(f)
-    
-def save_json(data):
-    with open('_annotations.coco.json', 'w', encoding='utf-8') as f:
-        json.dump(data, f)
 
 def make_imgs_annos(categories):
-    img_id = 20000
+    img_id = 200
     images = []
     annotations = []
     for directory in os.listdir(IMGS_PATH):
