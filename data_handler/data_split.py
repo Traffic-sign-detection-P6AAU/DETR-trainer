@@ -1,20 +1,21 @@
 import os
 import shutil
-from shared import load_json, save_json
+from data_handler.shared import load_json, save_json
 
 CATEGORIES_PATH = 'data_handler/accepted_categories.json'
 DATASET_NAME = 'uniLoginData'
-SOURCE_DIR = 'uniData'
+SOURCE_DIR = 'C:\\Users\\Andre\\Downloads\\JPEGImages.tar\\JPEGImages'
 MERGE_DATASET_PATH = "_annotations.coco.json"
 
 def p_join(dir_1, dir_2):
     return os.path.join(dir_1, dir_2)
 
 def split_dataset():
-    train_labels = load_json('train.json')
+    create_directories()
+    train_labels = load_json(p_join(SOURCE_DIR, 'train.json'))
     accepted_cats = load_json(CATEGORIES_PATH)['categories']
     accepted_cats_ids = [item['id'] for item in accepted_cats]
-    val_labels, test_labels = divide_data(load_json('test.json'), accepted_cats_ids)
+    val_labels, test_labels = divide_data(load_json(p_join(SOURCE_DIR, 'train.json')), accepted_cats_ids)
     train_labels = find_annos_and_imgs(train_labels, accepted_cats_ids)
     remove_imgs(val_labels, test_labels, train_labels)
     save_datasets(val_labels, test_labels, train_labels)
@@ -29,7 +30,7 @@ def create_directories():
     
 def divide_data(input_data, accepted_cats_ids):
     val_labels = {'annotations': input_data['annotations']}
-    val_labels['images'] = input_data['images'][:len(input_data['images'] // 2)]
+    val_labels['images'] = input_data['images'][:len(input_data['images']) // 2]
     val_labels = find_annos_and_imgs(val_labels, accepted_cats_ids)
     test_labels = {'annotations': input_data['annotations']}
     test_labels['images'] = input_data['images'][len(input_data['images']) // 2:]
@@ -40,10 +41,11 @@ def find_annos_and_imgs(labels, accepted_cats_ids):
     new_annos = []
     new_imgs = []
     for anno in labels['annotations']:
-        img_id = [img['id'] for img in labels['images'] if anno['image_id'] == img['id']]
+        img = [img for img in labels['images'] if anno['image_id'] == img['id']]
+        if len(img) == 0: continue
         if anno['category_id'] in accepted_cats_ids:
             new_annos.append(anno)
-            new_imgs.append(labels['images'][img_id])
+            new_imgs.append(img[0])
     return {
         'annotations': new_annos,
         'images': new_imgs
@@ -52,21 +54,21 @@ def find_annos_and_imgs(labels, accepted_cats_ids):
 def remove_imgs(val_labels, test_labels, train_labels):
     print("Copying images to train, test and val directories...")
     for image in test_labels['images']:
-        shutil.copy2(p_join(SOURCE_DIR, image['file_name']), p_join('test', image['file_name']))
+        shutil.copy2(p_join(SOURCE_DIR, image['file_name']), p_join(p_join(DATASET_NAME, 'test'), image['file_name']))
     print("-Test images done")
 
     for image in val_labels['images']:
-        shutil.copy2(p_join(SOURCE_DIR, image['file_name']), p_join('valid', image['file_name']))
+        shutil.copy2(p_join(SOURCE_DIR, image['file_name']), p_join(p_join(DATASET_NAME, 'valid'), image['file_name']))
     print("-Validation images done")
 
     for image in train_labels['images']:
-        shutil.copy2(p_join(SOURCE_DIR, image['file_name']), p_join('train', image['file_name']))
+        shutil.copy2(p_join(SOURCE_DIR, image['file_name']), p_join(p_join(DATASET_NAME, 'train'), image['file_name']))
     print("-Train images done")
 
 def save_datasets(val_labels, test_labels, train_labels):
-    save_json(val_labels, MERGE_DATASET_PATH)
-    save_json(test_labels, MERGE_DATASET_PATH)
-    save_json(train_labels, MERGE_DATASET_PATH)
+    save_json(val_labels, p_join(p_join(DATASET_NAME, 'valid'), MERGE_DATASET_PATH))
+    save_json(test_labels, p_join(p_join(DATASET_NAME, 'test'), MERGE_DATASET_PATH))
+    save_json(train_labels, p_join(p_join(DATASET_NAME, 'train'), MERGE_DATASET_PATH))
 
 """
 def split_dataset_old(source_dir):

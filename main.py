@@ -3,8 +3,10 @@ from trainer.data_loader import load_datasets, get_dataloaders, get_id2label
 from trainer.train import start_training
 from trainer.model import save_model, get_model, get_img_processor
 from trainer.settings import CHECKPOINT, MODEL_PATH
+from data_handler.data_split import split_dataset
 
 def main():
+    split_dataset()
     print("Type 1 to train the model or type 2 to use the model: ")
     choice = input()
     if choice == "1":
