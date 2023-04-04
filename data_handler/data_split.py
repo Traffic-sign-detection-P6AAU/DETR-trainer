@@ -4,7 +4,7 @@ from data_handler.shared import load_json, save_json
 
 CATEGORIES_PATH = 'data_handler/accepted_categories.json'
 DATASET_NAME = 'uniLoginData'
-SOURCE_DIR = 'C:\\Users\\Andre\\Downloads\\JPEGImages.tar\\JPEGImages'
+SOURCE_DIR = 'C:/Users/Andre/Downloads/JPEGImages.tar/JPEGImages'
 MERGE_DATASET_PATH = "_annotations.coco.json"
 
 def p_join(dir_1, dir_2):
@@ -27,7 +27,7 @@ def create_directories():
     os.makedirs(train_dir, exist_ok=True)
     os.makedirs(test_dir, exist_ok=True)
     os.makedirs(val_dir, exist_ok=True)
-    
+
 def divide_data(input_data, accepted_cats_ids):
     val_labels = {'annotations': input_data['annotations']}
     val_labels['images'] = input_data['images'][:len(input_data['images']) // 2]

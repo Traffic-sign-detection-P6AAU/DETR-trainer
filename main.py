@@ -4,10 +4,11 @@ from trainer.train import start_training
 from trainer.model import save_model, get_model, get_img_processor
 from trainer.settings import CHECKPOINT, MODEL_PATH
 from data_handler.data_split import split_dataset
+from data_handler.data_labeler import extend_annotations
 
 def main():
-    split_dataset()
-    print("Type 1 to train the model or type 2 to use the model: ")
+    print("Type 1 to train the model, type 2 to use the model.")
+    print("Type 3 to split dataset or type 4 to extend the labels.")
     choice = input()
     if choice == "1":
         image_processor = get_img_processor()
@@ -22,8 +23,12 @@ def main():
         image_processor = get_img_processor()
         model = get_model(MODEL_PATH)
         show_img_w_prediction(image_processor, model)
+    elif choice == "3":
+        split_dataset()
+    elif choice == "4":
+        extend_annotations()
     else:
-        print("Input was not 1 or 2.")
+        print("Input was not 1, 2, 3 or 4.")
 
 if __name__ == "__main__":
     main()
