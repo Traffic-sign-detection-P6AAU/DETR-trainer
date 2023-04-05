@@ -2,19 +2,20 @@ import os
 import cv2
 from data_handler.shared import load_json, save_json
 
-IMGS_PATH = "uniLoginData"
+IMGS_PATH = "../Datasets/mix"
 CATEGORIES_PATH = "data_handler/accepted_categories.json"
-MERGE_DATASET_PATH = "_annotations.coco.json"
+MERGE_ANNO_PATH = "outputData/train/_annotations.coco.json"
+SAVE_ANNO_PATH = "_annotations.coco.json"
 BBOX_MARGIN = 5
 
 def extend_annotations():
     categories = load_json(CATEGORIES_PATH)["categories"]
     imgs, annos = make_imgs_annos(categories)
-    merge_dataset = load_json(MERGE_DATASET_PATH)
+    merge_dataset = load_json(MERGE_ANNO_PATH)
     merge_dataset["images"].extend(imgs)
     merge_dataset["annotations"].extend(annos)
     merge_dataset["categories"] = (categories)
-    save_json(merge_dataset, MERGE_DATASET_PATH)
+    save_json(merge_dataset, SAVE_ANNO_PATH)
 
 def save_annotations():
     categories = load_json(CATEGORIES_PATH)["categories"]
@@ -24,19 +25,18 @@ def save_annotations():
         "categories": categories,
         "annotations": annos
     }
-    save_json(annotations, MERGE_DATASET_PATH)
+    save_json(annotations, SAVE_ANNO_PATH)
 
 
 def make_imgs_annos(categories):
-    img_id = 200
+    img_id = 20000
     images = []
     annotations = []
     for directory in os.listdir(IMGS_PATH):
         dtr_path = os.path.join(IMGS_PATH, directory)
         category_id = get_id_from_dir(categories, directory)
         for file in os.listdir(dtr_path):
-            if not file.endswith(".jpg"):
-                continue
+            #if not file.endswith(".jpg"): continue
             img_size = cv2.imread(os.path.join(dtr_path, file)).shape
             images.append(make_img(file, img_id, img_size))
             bbox = get_bbox(img_size)
