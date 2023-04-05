@@ -5,18 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Mainr",
+            "name": "Python: Main",
             "type": "python",
             "request": "launch",
             "program": "main.py",
-            "console": "integratedTerminal",
-            "justMyCode": true
-        },
-        {
-            "name": "Python: Data Labeler",
-            "type": "python",
-            "request": "launch",
-            "program": "data_handler/data_labeler.py",
             "console": "integratedTerminal",
             "justMyCode": true
         }
