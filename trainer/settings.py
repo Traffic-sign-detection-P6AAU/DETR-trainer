@@ -1,4 +1,4 @@
-DATASET_PATH = "../Datasets/trafikSigns/"
+DATASET_PATH = "../Datasets/ultimateDataset/"
 MAX_EPOCHS = 100
 BATCH_SIZE = 4
 ACCUMULATE_GRAD_BATCHES = 8
