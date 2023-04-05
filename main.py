@@ -7,8 +7,11 @@ from data_handler.data_split import split_dataset
 from data_handler.data_labeler import extend_annotations
 
 def main():
-    print("Type 1 to train the model, type 2 to use the model.")
-    print("Type 3 to split dataset or type 4 to extend the labels.")
+    print("---Menu list---")
+    print("Type: 1 to train the model")
+    print("Type: 2 to use the model")
+    print("Type: 3 to split dataset")
+    print("Type: 4 to extend the labels")
     choice = input()
     if choice == "1":
         image_processor = get_img_processor()

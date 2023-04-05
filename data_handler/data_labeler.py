@@ -1,6 +1,6 @@
 import os
 import cv2
-from shared import load_json, save_json
+from data_handler.shared import load_json, save_json
 
 IMGS_PATH = "mixed-data"
 CATEGORIES_PATH = "data_handler/accepted_categories.json"
@@ -84,5 +84,3 @@ def make_anno(image_id, category_id, bbox, area):
         "ignore": False,
         "iscrowd": 0
     }
-
-save_annotations()
