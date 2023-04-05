@@ -16,7 +16,7 @@ def main():
     if choice == "1":
         image_processor = get_img_processor()
         pre_model = get_model(CHECKPOINT)
-        show_img_w_prediction(image_processor, pre_model)
+        # show_img_w_prediction(image_processor, pre_model)
         train_dataset, val_dataset, test_dataset = load_datasets(image_processor)
         train_dataloader, val_dataloader, test_dataloader = get_dataloaders(image_processor, train_dataset, val_dataset, test_dataset)
         trained_model = start_training(train_dataloader, val_dataloader, get_id2label(train_dataset))

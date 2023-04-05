@@ -2,7 +2,7 @@ import os
 import cv2
 from data_handler.shared import load_json, save_json
 
-IMGS_PATH = "mixed-data"
+IMGS_PATH = "uniLoginData"
 CATEGORIES_PATH = "data_handler/accepted_categories.json"
 MERGE_DATASET_PATH = "_annotations.coco.json"
 BBOX_MARGIN = 5
@@ -35,6 +35,8 @@ def make_imgs_annos(categories):
         dtr_path = os.path.join(IMGS_PATH, directory)
         category_id = get_id_from_dir(categories, directory)
         for file in os.listdir(dtr_path):
+            if not file.endswith(".jpg"):
+                continue
             img_size = cv2.imread(os.path.join(dtr_path, file)).shape
             images.append(make_img(file, img_id, img_size))
             bbox = get_bbox(img_size)
