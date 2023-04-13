@@ -2,6 +2,7 @@
 training-datasets/
 test-datasets/
 Datasets/
+outputData/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

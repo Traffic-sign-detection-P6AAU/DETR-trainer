@@ -1,10 +1,12 @@
 import os
 import random
+from torch import DoubleTensor
 import torchvision
 import cv2
 import supervision as sv
 from torch.utils.data import DataLoader
 from trainer.settings import DATASET_PATH, BATCH_SIZE, NUM_WORKERS
+from torch.utils.data.sampler import WeightedRandomSampler
 # settings
 ANNOTATION_FILE_NAME = "_annotations.coco.json"
 TRAIN_DIRECTORY = os.path.join(DATASET_PATH, "train")
@@ -67,19 +69,36 @@ def get_dataloaders(image_processor, train_dataset, val_dataset, test_dataset):
             'labels': labels
         }
 
-    train_dataloader = make_dataloader(train_dataset, collate_fn)
+    train_dataloader = make_dataloader(train_dataset, collate_fn, True)
     train_dataloader.shuffle = True
-    val_dataloader = make_dataloader(val_dataset, collate_fn)
+    val_dataloader = make_dataloader(val_dataset, collate_fn, True)
     test_dataloader = make_dataloader(test_dataset, collate_fn)
     return train_dataloader, val_dataloader, test_dataloader
 
-def make_dataloader(dataset, cool_fn):
+def make_dataloader(dataset, cool_fn, use_sampler=False):
+    sampler = None
+    if use_sampler:
+        # https://stackoverflow.com/questions/60812032/using-weightedrandomsampler-in-pytorch
+        count = [0]*(len(dataset.coco.cats))
+        count[0] = 1 # to avoid division by zero
+        dataset.coco.imgToAnns
+        for ann in dataset.coco.imgToAnns.values():
+            for a in ann:
+                count[a['category_id']] += 1
+        num_samples = len(count)
+        labels = list(dataset.coco.cats.keys())
+        class_weights = [num_samples/count[i] for i in range(len(count))]
+        weights = [class_weights[labels[i]] for i in range(int(num_samples))]
+        weights[0] = 0 # to skip category 0
+        sampler = WeightedRandomSampler(DoubleTensor(weights), int(num_samples))
+
     return DataLoader(
         dataset=dataset,
         collate_fn=cool_fn,
         pin_memory=True,
         num_workers=NUM_WORKERS,
-        batch_size=BATCH_SIZE)
+        batch_size=BATCH_SIZE,
+        sampler=sampler)
 
 def show_img_from_data(train_dataset, test_dataset):
     # select random image
