@@ -54,7 +54,6 @@ def get_bbox(img_size):
 
 def darw_bbox(path):
     image = cv2.imread(path)
-    height, width, c = image.shape
     left = 35
     top = 24
     right = 108
