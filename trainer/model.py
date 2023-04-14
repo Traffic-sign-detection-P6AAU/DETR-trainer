@@ -22,9 +22,9 @@ class Detr(pl.LightningModule):
         return self.model(pixel_values=pixel_values, pixel_mask=pixel_mask)
 
     def common_step(self, batch, batch_idx):
-        pixel_values = batch["pixel_values"]
-        pixel_mask = batch["pixel_mask"]
-        labels = [{k: v.to(self.device) for k, v in t.items()} for t in batch["labels"]]
+        pixel_values = batch['pixel_values']
+        pixel_mask = batch['pixel_mask']
+        labels = [{k: v.to(self.device) for k, v in t.items()} for t in batch['labels']]
 
         outputs = self.model(pixel_values=pixel_values, pixel_mask=pixel_mask, labels=labels)
 
@@ -36,17 +36,17 @@ class Detr(pl.LightningModule):
     def training_step(self, batch, batch_idx):
         loss, loss_dict = self.common_step(batch, batch_idx)     
         # logs metrics for each training_step, and the average across the epoch
-        self.log("training_loss", loss)
+        self.log('training_loss', loss)
         for k,v in loss_dict.items():
-            self.log("train_" + k, v.item())
+            self.log('train_' + k, v.item())
 
         return loss
 
     def validation_step(self, batch, batch_idx):
         loss, loss_dict = self.common_step(batch, batch_idx)     
-        self.log("validation/loss", loss)
+        self.log('validation/loss', loss)
         for k, v in loss_dict.items():
-            self.log("validation_" + k, v.item())
+            self.log('validation_' + k, v.item())
             
         return loss
 
@@ -57,10 +57,10 @@ class Detr(pl.LightningModule):
         # - https://github.com/facebookresearch/detr/blob/3af9fa878e73b6894ce3596450a8d9b89d918ca9/main.py#L131-L139
         param_dicts = [
             {
-                "params": [p for n, p in self.named_parameters() if "backbone" not in n and p.requires_grad]},
+                'params': [p for n, p in self.named_parameters() if 'backbone' not in n and p.requires_grad]},
             {
-                "params": [p for n, p in self.named_parameters() if "backbone" in n and p.requires_grad],
-                "lr": self.lr_backbone,
+                'params': [p for n, p in self.named_parameters() if 'backbone' in n and p.requires_grad],
+                'lr': self.lr_backbone,
             },
         ]
         return torch.optim.AdamW(param_dicts, lr=self.lr, weight_decay=self.weight_decay)

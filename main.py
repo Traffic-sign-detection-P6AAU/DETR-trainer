@@ -9,13 +9,13 @@ from data_handler.data_labeler import extend_annotations
 CATEGORIES_PATH = 'data_handler/categories.json'
 
 def main():
-    print("---Menu list---")
-    print("Type: 1 to train the model")
-    print("Type: 2 to use the model")
-    print("Type: 3 to split dataset")
-    print("Type: 4 to extend the labels")
+    print('---Menu list---')
+    print('Type: 1 to train the model')
+    print('Type: 2 to use the model')
+    print('Type: 3 to split dataset')
+    print('Type: 4 to extend the labels')
     choice = input()
-    if choice == "1":
+    if choice == '1':
         image_processor = get_img_processor()
         pre_model = get_model(CHECKPOINT)
         # show_img_w_prediction(image_processor, pre_model)
@@ -24,16 +24,16 @@ def main():
         trained_model = start_training(train_dataloader, val_dataloader, get_id2label(train_dataset))
         #show_model_prediction(test_dataset, image_processor, trained_model)
         save_model(trained_model)
-    elif choice == "2":
+    elif choice == '2':
         image_processor = get_img_processor()
         model = get_model(MODEL_PATH)
         show_img_w_prediction(image_processor, model, CATEGORIES_PATH)
-    elif choice == "3":
+    elif choice == '3':
         split_dataset(CATEGORIES_PATH)
-    elif choice == "4":
+    elif choice == '4':
         extend_annotations()
     else:
-        print("Input was not 1, 2, 3 or 4.")
+        print('Input was not 1, 2, 3 or 4.')
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

@@ -3,16 +3,16 @@ from data_handler.data_split import find_annos_and_imgs, divide_data
 
 ACCEPTED_CATS = [
     {
-        "id": 1,
-        "oldid": 1
+        'id': 1,
+        'oldid': 1
     },
     {
-        "id": 2,
-        "oldid": 2
+        'id': 2,
+        'oldid': 2
     },
     {
-        "id": 3,
-        "oldid": 3
+        'id': 3,
+        'oldid': 3
     }
 ]
 

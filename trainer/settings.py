@@ -1,4 +1,4 @@
-DATASET_PATH = "../Datasets/ultimateDataset/"
+DATASET_PATH = '../Datasets/ultimateDataset/'
 MAX_EPOCHS = 100
 BATCH_SIZE = 4
 ACCUMULATE_GRAD_BATCHES = 8
@@ -7,6 +7,6 @@ LEARN_RATE_BACKBONE = 0.00001 # Learning rate backbone
 WEIGHT_DECAY = 0.0001
 CONFIDENCE_TRESHOLD = 0.5
 IOU_TRESHOLD = 0.8
-MODEL_PATH = "custom-model"
+MODEL_PATH = 'custom-model'
 NUM_WORKERS = 20 # Recommended to num of cores
-CHECKPOINT = "facebook/detr-resnet-50"
+CHECKPOINT = 'facebook/detr-resnet-50'

@@ -16,9 +16,9 @@ def start_training(train_dataloader, val_dataloader, id2label):
 
     batch = next(iter(train_dataloader))
     outputs = model(pixel_values=batch['pixel_values'], pixel_mask=batch['pixel_mask'])
-    logger = TensorBoardLogger("tb_logs", name="P6_model")
+    logger = TensorBoardLogger('tb_logs', name='P6_model')
     trainer = Trainer(devices=1,
-                      accelerator="gpu",
+                      accelerator='gpu',
                       logger=logger,
                       max_epochs=MAX_EPOCHS,
                       gradient_clip_val=0.1,
