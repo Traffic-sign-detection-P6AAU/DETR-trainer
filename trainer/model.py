@@ -6,7 +6,7 @@ from trainer.settings import CHECKPOINT, MODEL_PATH
 class Detr(pl.LightningModule):
     def __init__(self, lr, lr_backbone, weight_decay, train_load, val_load, id2label):
         super().__init__()
-        
+
         self.model = DetrForObjectDetection.from_pretrained(
             pretrained_model_name_or_path=CHECKPOINT,
             num_labels=len(id2label),

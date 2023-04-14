@@ -6,6 +6,8 @@ from trainer.settings import CHECKPOINT, MODEL_PATH
 from data_handler.data_split import split_dataset
 from data_handler.data_labeler import extend_annotations
 
+CATEGORIES_PATH = 'data_handler/categories.json'
+
 def main():
     print("---Menu list---")
     print("Type: 1 to train the model")
@@ -25,9 +27,9 @@ def main():
     elif choice == "2":
         image_processor = get_img_processor()
         model = get_model(MODEL_PATH)
-        show_img_w_prediction(image_processor, model)
+        show_img_w_prediction(image_processor, model, CATEGORIES_PATH)
     elif choice == "3":
-        split_dataset()
+        split_dataset(CATEGORIES_PATH)
     elif choice == "4":
         extend_annotations()
     else:

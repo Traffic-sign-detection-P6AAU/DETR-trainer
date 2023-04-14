@@ -1,0 +1,104 @@
+{
+    "categories": [
+        {
+            "id": 0,
+            "name": "speed-signs",
+            "supercategory": "none"
+        },
+        {
+            "id": 1,
+            "name": "all-ending",
+            "supercategory": "speed-signs"
+        },
+        {
+            "id": 2,
+            "name": "no-parking",
+            "supercategory": "speed-signs"
+        },
+        {
+            "id": 3,
+            "name": "no-parking-and-stopping",
+            "supercategory": "speed-signs"
+        },
+        {
+            "id": 4,
+            "name": "speed-100",
+            "supercategory": "speed-signs"
+        },
+        {
+            "id": 5,
+            "name": "speed-110",
+            "supercategory": "speed-signs"
+        },
+        {
+            "id": 6,
+            "name": "speed-120",
+            "supercategory": "speed-signs"
+        },
+        {
+            "id": 7,
+            "name": "speed-30",
+            "supercategory": "speed-signs"
+        },
+        {
+            "id": 8,
+            "name": "speed-40",
+            "supercategory": "speed-signs"
+        },
+        {
+            "id": 9,
+            "name": "speed-40-ending",
+            "supercategory": "speed-signs"
+        },
+        {
+            "id": 10,
+            "name": "speed-50",
+            "supercategory": "speed-signs"
+        },
+        {
+            "id": 11,
+            "name": "speed-50-ending",
+            "supercategory": "speed-signs"
+        },
+        {
+            "id": 12,
+            "name": "speed-60",
+            "supercategory": "speed-signs"
+        },
+        {
+            "id": 13,
+            "name": "speed-60-ending",
+            "supercategory": "speed-signs"
+        },
+        {
+            "id": 14,
+            "name": "speed-70",
+            "supercategory": "speed-signs"
+        },
+        {
+            "id": 15,
+            "name": "speed-70-ending",
+            "supercategory": "speed-signs"
+        },
+        {
+            "id": 16,
+            "name": "speed-80",
+            "supercategory": "speed-signs"
+        },
+        {
+            "id": 17,
+            "name": "speed-80-ending",
+            "supercategory": "speed-signs"
+        },
+        {
+            "id": 18,
+            "name": "speed-90",
+            "supercategory": "speed-signs"
+        },
+        {
+            "id": 19,
+            "name": "speed-90-ending",
+            "supercategory": "speed-signs"
+        }
+    ]
+}

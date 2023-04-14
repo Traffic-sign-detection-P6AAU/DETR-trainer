@@ -2,7 +2,6 @@ import os
 import shutil
 from data_handler.shared import load_json, save_json
 
-CATEGORIES_PATH = 'data_handler/accepted_categories.json'
 DATASET_NAME = 'outputData'
 SOURCE_DIR = 'C:/Users/Jakob/Documents/GitHub/Datasets/JPEGImages'
 ANNO_NAME = "_annotations.coco.json"
@@ -10,11 +9,11 @@ ANNO_NAME = "_annotations.coco.json"
 def p_join(dir_1, dir_2):
     return os.path.join(dir_1, dir_2)
 
-def split_dataset():
+def split_dataset(categories_path):
     create_directories()
     print('Loading data and dividing...')
     train_labels = load_json(p_join(SOURCE_DIR, 'train.json'))
-    accepted_cats = load_json(CATEGORIES_PATH)['categories']
+    accepted_cats = load_json(categories_path)['categories']
     accepted_cats_ids = [item['oldid'] for item in accepted_cats]
     val_labels, test_labels = divide_data(load_json(p_join(SOURCE_DIR, 'train.json')), accepted_cats_ids, accepted_cats)
     print('Finding annotations and images..')
