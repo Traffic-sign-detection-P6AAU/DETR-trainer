@@ -4,14 +4,15 @@ import torch
 import cv2
 import supervision as sv
 from trainer.settings import CONFIDENCE_TRESHOLD, IOU_TRESHOLD
+from data_handler.shared import load_json
 
 DEVICE = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
-def show_img_w_prediction(image_processor, model): # disable gradient calculation reduse memory 
+def show_img_w_prediction(image_processor, model, categories_path): # disable gradient calculation reduse memory 
     with torch.no_grad():
 
         # load image and predict
-        image = cv2.imread("../Datasets/trafikSigns/test/0005952.jpg")
+        image = cv2.imread('../Datasets/google_maps/b3.jpg')
         inputs = image_processor(images=image, return_tensors='pt').to(DEVICE)
         outputs = model(**inputs)
 
@@ -25,12 +26,11 @@ def show_img_w_prediction(image_processor, model): # disable gradient calculatio
 
     # annotate
     detections = sv.Detections.from_transformers(transformers_results=results).with_nms(threshold=IOU_TRESHOLD)
-
-    labels = [
-        f"{model.config.id2label[class_id]} {confidence:0.2f}" 
-        for _, confidence, class_id, _
-        in detections
-    ]
+    categories = load_json(categories_path)['categories']
+    labels = []
+    for _, confidence, class_id, _ in detections:
+        class_name = categories[class_id]['name']
+        labels.append(f'{class_name} {confidence:0.2f}' )
 
     box_annotator = sv.BoxAnnotator()
     frame = box_annotator.annotate(scene=image, detections=detections, labels=labels)
@@ -56,7 +56,7 @@ def show_model_prediction(test_dataset, image_processor, model):
 
     # annotate
     detections = sv.Detections.from_coco_annotations(coco_annotation=annotations)
-    labels = [f"{id2label[class_id]}" for _, _, class_id, _ in detections]
+    labels = [f'{id2label[class_id]}' for _, _, class_id, _ in detections]
     frame = box_annotator.annotate(scene=image.copy(), detections=detections, labels=labels)
 
     print('ground truth')
@@ -80,7 +80,7 @@ def show_model_prediction(test_dataset, image_processor, model):
 
     # annotate
     detections = sv.Detections.from_transformers(transformers_results=results).with_nms(threshold=0.5)
-    labels = [f"{id2label[class_id]} {confidence:.2f}" for _, confidence, class_id, _ in detections]
+    labels = [f'{id2label[class_id]} {confidence:.2f}' for _, confidence, class_id, _ in detections]
     frame = box_annotator.annotate(scene=image.copy(), detections=detections, labels=labels)
 
     print('detections')
