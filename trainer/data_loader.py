@@ -80,16 +80,18 @@ def make_dataloader(dataset, cool_fn, use_sampler=False):
     if use_sampler:
         # https://stackoverflow.com/questions/60812032/using-weightedrandomsampler-in-pytorch
         count = [0]*(len(dataset.coco.cats))
-        count[0] = 1 # to avoid division by zero
-        dataset.coco.imgToAnns
         for ann in dataset.coco.imgToAnns.values():
             for a in ann:
                 count[a['category_id']] += 1
         num_samples = len(count)
-        labels = list(dataset.coco.cats.keys())
-        class_weights = [num_samples/count[i] for i in range(len(count))]
-        weights = [class_weights[labels[i]] for i in range(int(num_samples))]
-        weights[0] = 0 # to skip category 0
+        weights = []
+        for i in range(num_samples):
+            if count[i] == 0:
+                print('{} (id: {}) has no samples'.format(dataset.coco.cats[i]['name'], i))
+                weights.append(0)
+            else:
+                weights.append(num_samples/count[i])
+        print('\n') # to separate the output from the previous print
         sampler = WeightedRandomSampler(DoubleTensor(weights), int(num_samples))
 
     return DataLoader(
