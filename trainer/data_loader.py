@@ -72,7 +72,7 @@ def get_dataloaders(image_processor, train_dataset, val_dataset, test_dataset):
     train_dataloader = make_dataloader(train_dataset, collate_fn, True)
     train_dataloader.shuffle = True
     val_dataloader = make_dataloader(val_dataset, collate_fn, True)
-    test_dataloader = make_dataloader(test_dataset, collate_fn)
+    test_dataloader = DataLoader(dataset=test_dataset, collate_fn=collate_fn, batch_size=BATCH_SIZE)
     return train_dataloader, val_dataloader, test_dataloader
 
 def make_dataloader(dataset, cool_fn, use_sampler=False):
