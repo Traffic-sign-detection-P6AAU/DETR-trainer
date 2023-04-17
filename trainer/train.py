@@ -24,6 +24,7 @@ def start_training(train_dataloader, val_dataloader, id2label):
                       gradient_clip_val=0.1,
                       accumulate_grad_batches=ACCUMULATE_GRAD_BATCHES,
                       log_every_n_steps=1)
+    torch.set_float32_matmul_precision('high')
     trainer.fit(model)
     # Create a TensorBoard callback
     return model.to(DEVICE)

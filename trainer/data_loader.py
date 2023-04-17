@@ -69,9 +69,9 @@ def get_dataloaders(image_processor, train_dataset, val_dataset, test_dataset):
             'labels': labels
         }
 
-    train_dataloader = make_dataloader(train_dataset, collate_fn, True)
+    train_dataloader = make_dataloader(train_dataset, collate_fn)
     train_dataloader.shuffle = True
-    val_dataloader = make_dataloader(val_dataset, collate_fn, True)
+    val_dataloader = make_dataloader(val_dataset, collate_fn)
     test_dataloader = DataLoader(dataset=test_dataset, collate_fn=collate_fn, batch_size=8)
     return train_dataloader, val_dataloader, test_dataloader
 
@@ -99,8 +99,7 @@ def make_dataloader(dataset, cool_fn, use_sampler=False):
         collate_fn=cool_fn,
         pin_memory=True,
         num_workers=NUM_WORKERS,
-        batch_size=BATCH_SIZE,
-        sampler=sampler)
+        batch_size=BATCH_SIZE)
 
 def show_img_from_data(train_dataset, test_dataset):
     # select random image
