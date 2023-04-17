@@ -7,3 +7,4 @@ numpy
 supervision
 pytorch_lightning
 timm
+coco_eval
