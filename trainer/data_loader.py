@@ -69,9 +69,9 @@ def get_dataloaders(image_processor, train_dataset, val_dataset, test_dataset):
             'labels': labels
         }
 
-    train_dataloader = make_dataloader(train_dataset, collate_fn)
+    train_dataloader = make_dataloader(train_dataset, collate_fn, True)
     train_dataloader.shuffle = True
-    val_dataloader = make_dataloader(val_dataset, collate_fn)
+    val_dataloader = make_dataloader(val_dataset, collate_fn, True)
     test_dataloader = DataLoader(dataset=test_dataset, collate_fn=collate_fn, batch_size=8)
     return train_dataloader, val_dataloader, test_dataloader
 
@@ -79,27 +79,29 @@ def make_dataloader(dataset, cool_fn, use_sampler=False):
     sampler = None
     if use_sampler:
         # https://stackoverflow.com/questions/60812032/using-weightedrandomsampler-in-pytorch
-        count = [0]*(len(dataset.coco.cats))
+        num_cats = len(dataset.coco.cats)
+        num_imgs = len(dataset.coco.imgs)
+        count = [0]*num_cats
         for ann in dataset.coco.imgToAnns.values():
             for a in ann:
                 count[a['category_id']] += 1
-        num_samples = len(count)
         weights = []
-        for i in range(num_samples):
+        for i in range(num_cats):
             if count[i] == 0:
                 print('{} (id: {}) has no samples'.format(dataset.coco.cats[i]['name'], i))
                 weights.append(0)
             else:
-                weights.append(num_samples/count[i])
+                weights.append(1/count[i])
         print('\n') # to separate the output from the previous print
-        sampler = WeightedRandomSampler(DoubleTensor(weights), int(num_samples))
+        sampler = WeightedRandomSampler(weights=DoubleTensor(weights), num_samples=num_imgs, replacement=True)
 
     return DataLoader(
         dataset=dataset,
         collate_fn=cool_fn,
         pin_memory=True,
         num_workers=NUM_WORKERS,
-        batch_size=BATCH_SIZE)
+        batch_size=BATCH_SIZE,
+        sampler=sampler)
 
 def show_img_from_data(train_dataset, test_dataset):
     # select random image
