@@ -5,7 +5,7 @@ from trainer.model import save_model, get_model, get_img_processor
 from trainer.settings import MODEL_PATH
 from data_handler.data_split import split_dataset
 from data_handler.data_labeler import extend_annotations
-from evaluation.evaluate_test_data import evaluate_on_test_data
+from evaluation.evaluate_test_data import evaluate_on_test_data, evaluate_accuracy
 
 CATEGORIES_PATH = 'data_handler/categories.json'
 
@@ -26,6 +26,8 @@ def main():
     elif choice == '2':
         image_processor = get_img_processor()
         model = get_model(MODEL_PATH)
+        train_dataset, val_dataset, test_dataset = load_datasets(image_processor)
+        evaluate_accuracy(model, test_dataset)
         show_img_w_prediction(image_processor, model, CATEGORIES_PATH)
     elif choice == '3':
         split_dataset(CATEGORIES_PATH)
