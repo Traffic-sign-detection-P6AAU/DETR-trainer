@@ -36,7 +36,9 @@ def evaluate_accuracy(model, test_dataset):
 
         res = detections.class_id
         gt = [ann['category_id'] for ann in annotations]
-        if all(res == gt):
+        if len(res) != len(gt):
+            errors += 1
+        elif all(res == gt):
             num_correct += 1
         else:
             errors += 1
