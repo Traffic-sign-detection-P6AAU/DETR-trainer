@@ -20,7 +20,7 @@ def main():
         image_processor = get_img_processor()
         train_dataset, val_dataset, test_dataset = load_datasets(image_processor)
         train_dataloader, val_dataloader, test_dataloader = get_dataloaders(image_processor, train_dataset, val_dataset, test_dataset)
-        trained_model = start_training(train_dataloader, val_dataloader, get_id2label(train_dataset))
+        trained_model = start_training(train_dataloader, val_dataloader, test_dataloader, get_id2label(train_dataset))
         save_model(trained_model)
         evaluate_on_test_data(trained_model, test_dataset, test_dataloader)
     elif choice == '2':

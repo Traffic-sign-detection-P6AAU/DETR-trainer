@@ -48,10 +48,8 @@ def evaluate_accuracy(model, test_dataset):
 def evaluate_on_test_data(model, test_dataset, test_dataloader):
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     evaluator = CocoEvaluator(coco_gt=test_dataset.coco, iou_types=['bbox'])
-
     print("Running evaluation...")
     image_processor = get_img_processor()
-
     for idx, batch in enumerate(tqdm(test_dataloader)):
         pixel_values = batch['pixel_values'].to(device)
         pixel_mask = batch['pixel_mask'].to(device)
@@ -69,9 +67,6 @@ def evaluate_on_test_data(model, test_dataset, test_dataloader):
     evaluator.synchronize_between_processes()
     evaluator.accumulate()
     evaluator.summarize()
-    with open('evaluation.txt', 'w', encoding='utf-8') as f:
-        f.write(evaluator.get_results())
-
 
 def prepare_for_coco_detection(predictions):
     coco_results = []

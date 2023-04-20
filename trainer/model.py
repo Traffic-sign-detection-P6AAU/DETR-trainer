@@ -1,6 +1,8 @@
 import torch
 import pytorch_lightning as pl
 from transformers import DetrForObjectDetection, DetrImageProcessor
+from torchmetrics import Accuracy
+import torch.nn.functional as F
 from trainer.settings import CHECKPOINT, MODEL_PATH
 
 class Detr(pl.LightningModule):
@@ -14,6 +16,10 @@ class Detr(pl.LightningModule):
         )
         self.train_load = train_load
         self.val_load = val_load
+        self.accuracy = Accuracy(
+            task='multilabel',
+            num_labels=len(id2label)
+        )
         self.lr = lr
         self.lr_backbone = lr_backbone
         self.weight_decay = weight_decay
@@ -34,7 +40,7 @@ class Detr(pl.LightningModule):
         return loss, loss_dict
 
     def training_step(self, batch, batch_idx):
-        loss, loss_dict = self.common_step(batch, batch_idx)     
+        loss, loss_dict = self.common_step(batch, batch_idx)
         # logs metrics for each training_step, and the average across the epoch
         self.log('training_loss', loss)
         for k,v in loss_dict.items():
@@ -49,6 +55,15 @@ class Detr(pl.LightningModule):
             self.log('validation_' + k, v.item())
             
         return loss
+    
+    def test_step(self, batch, batch_idx):
+        x, y = batch
+        y_hat = self.model(x)
+        loss = F.cross_entropy(y_hat, y)
+        pred = ...
+        self.validation_step_outputs.append(pred)
+        return pred
+    
 
     def configure_optimizers(self):
         # DETR authors decided to use different learning rate for backbone
