@@ -57,13 +57,21 @@ class Detr(pl.LightningModule):
         return loss
     
     def test_step(self, batch, batch_idx):
+        loss, loss_dict = self.common_step(batch, batch_idx)   
+        self.log('test/loss', loss)
+        for x, y in loss_dict.items():
+            #accuracy = Accuracy(task='multilabel')
+            #acc = accuracy(self.num_labels, y)
+            #self.log('test_acc', acc, on_epoch=True)
+            self.log('test_loss' + x, y.item())
+        return loss
+    
+    def _shared_eval_step(self, batch, batch_idx):
         x, y = batch
         y_hat = self.model(x)
         loss = F.cross_entropy(y_hat, y)
-        pred = ...
-        self.validation_step_outputs.append(pred)
-        return pred
-    
+        acc = Accuracy(y_hat, y)
+        return loss, acc
 
     def configure_optimizers(self):
         # DETR authors decided to use different learning rate for backbone
