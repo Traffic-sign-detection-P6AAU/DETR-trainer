@@ -8,18 +8,14 @@ from trainer.settings import CHECKPOINT, MODEL_PATH
 class Detr(pl.LightningModule):
     def __init__(self, lr, lr_backbone, weight_decay, train_load, val_load, id2label):
         super().__init__()
-
+        print(f"MRGA: {len(id2label)}")
         self.model = DetrForObjectDetection.from_pretrained(
             pretrained_model_name_or_path=CHECKPOINT,
             num_labels=len(id2label),
             ignore_mismatched_sizes=True
-        )
+        ) 
         self.train_load = train_load
         self.val_load = val_load
-        self.accuracy = Accuracy(
-            task='multilabel',
-            num_labels=len(id2label)
-        )
         self.lr = lr
         self.lr_backbone = lr_backbone
         self.weight_decay = weight_decay
@@ -53,19 +49,25 @@ class Detr(pl.LightningModule):
         self.log('validation/loss', loss)
         for k, v in loss_dict.items():
             self.log('validation_' + k, v.item())
-            
+
         return loss
     
     def test_step(self, batch, batch_idx):
-        loss, loss_dict = self.common_step(batch, batch_idx)   
+        pixel_values = batch['pixel_values']
+        pixel_mask = batch['pixel_mask']
+        labels = [{k: v.to(self.device) for k, v in t.items()} for t in batch['labels']]
+
+        loss, loss_dict = self.common_step(batch, batch_idx)
         self.log('test/loss', loss)
+        accuracy = Accuracy(task="multilabel", num_labels=5)
+        preds = self.forward(pixel_values, pixel_mask).logits
+        print(labels)
+        acc = accuracy(preds, labels)
+        self.log('accuracy', acc, on_epoch=True)
         for x, y in loss_dict.items():
-            #accuracy = Accuracy(task='multilabel')
-            #acc = accuracy(self.num_labels, y)
-            #self.log('test_acc', acc, on_epoch=True)
             self.log('test_loss' + x, y.item())
         return loss
-    
+        
     def _shared_eval_step(self, batch, batch_idx):
         x, y = batch
         y_hat = self.model(x)
