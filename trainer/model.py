@@ -55,8 +55,15 @@ class Detr(pl.LightningModule):
     def test_step(self, batch, batch_idx):
         pixel_values = batch['pixel_values']
         pixel_mask = batch['pixel_mask']
-        labels = [{k: v.to(self.device) for k, v in t.items()} for t in batch['labels']]
-
+        loss, loss_dict = self.common_step(batch, batch_idx)
+        #labels = [{k: v.to(self.device) for k, v in t.items()} for t in batch['labels']]
+        preds = self.forward(pixel_values, pixel_mask)
+        print(preds)
+        acc = Accuracy(task="multilabel", num_labels=5)
+        self.log('test_acc', acc(preds, pixel_mask))
+        self.log('test/loss', loss)
+        return loss
+        """
         loss, loss_dict = self.common_step(batch, batch_idx)
         self.log('test/loss', loss)
         accuracy = Accuracy(task="multilabel", num_labels=5)
@@ -67,7 +74,7 @@ class Detr(pl.LightningModule):
         for x, y in loss_dict.items():
             self.log('test_loss' + x, y.item())
         return loss
-        
+        """
     def _shared_eval_step(self, batch, batch_idx):
         x, y = batch
         y_hat = self.model(x)
