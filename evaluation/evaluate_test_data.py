@@ -45,6 +45,7 @@ def evaluate_accuracy(model, test_dataset):
         i += 1
     print('num_correct: ', num_correct, 'errors: ', errors)
     print('accuracy: ', num_correct / (num_correct + errors))
+    
 def evaluate_on_test_data(model, test_dataset, test_dataloader):
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     evaluator = CocoEvaluator(coco_gt=test_dataset.coco, iou_types=['bbox'])
