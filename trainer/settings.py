@@ -1,5 +1,5 @@
-DATASET_PATH = '../Datasets/SpeedSignsForEU/'
-MAX_EPOCHS = 250
+DATASET_PATH = '../Datasets/SpeedSignsForEUMedium/'
+MAX_EPOCHS = 400
 BATCH_SIZE = 10
 ACCUMULATE_GRAD_BATCHES = 12
 LEARN_RATE = 0.0001 # Learning rate
@@ -9,4 +9,4 @@ CONFIDENCE_TRESHOLD = 0.5
 IOU_TRESHOLD = 0.8
 MODEL_PATH = 'custom-model'
 NUM_WORKERS = 20 # Recommended to num of cores
-CHECKPOINT = 'facebook/detr-resnet-101'
+CHECKPOINT = 'facebook/detr-resnet-50'
