@@ -1,3 +1,4 @@
+import torch
 from trainer.img_show import show_img_w_prediction, show_model_prediction
 from trainer.data_loader import load_datasets, get_dataloaders, get_id2label
 from trainer.train import start_training
@@ -22,14 +23,10 @@ def main():
         train_dataloader, val_dataloader, test_dataloader = get_dataloaders(image_processor, train_dataset, val_dataset, test_dataset)
         trained_model = start_training(train_dataloader, val_dataloader, test_dataloader, get_id2label(train_dataset))
         save_model(trained_model)
-        evaluate_on_test_data(trained_model, test_dataset, test_dataloader)
+        evaluate_on_test_data(trained_model, test_dataloader, test_dataset)
     elif choice == '2':
         image_processor = get_img_processor()
         model = get_model(MODEL_PATH)
-        train_dataset, val_dataset, test_dataset = load_datasets(image_processor)
-        train_dataloader, val_dataloader, test_dataloader = get_dataloaders(image_processor, train_dataset, val_dataset, test_dataset)
-        evaluate_on_test_data(model, test_dataloader)
-        train_dataset, val_dataset, test_dataset = load_datasets(image_processor)
         show_img_w_prediction(image_processor, model, CATEGORIES_PATH)
     elif choice == '3':
         split_dataset(CATEGORIES_PATH)

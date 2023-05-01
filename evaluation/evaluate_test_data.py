@@ -46,10 +46,9 @@ def evaluate_accuracy(model, test_dataset):
     print('num_correct: ', num_correct, 'errors: ', errors)
     print('accuracy: ', num_correct / (num_correct + errors))
     
-def evaluate_on_test_data(model, test_dataloader):
+def evaluate_on_test_data(model, test_dataloader, test_dataset):
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-    evaluator = CocoEvaluator(coco_gt=test_dataloader.dataset.coco, iou_types=['bbox'])
-
+    evaluator = CocoEvaluator(coco_gt=test_dataset.coco, iou_types=['bbox'])
     print("Running evaluation...")
     image_processor = get_img_processor()
     for idx, batch in enumerate(tqdm(test_dataloader)):
@@ -65,10 +64,10 @@ def evaluate_on_test_data(model, test_dataloader):
 
         predictions = {target['image_id'].item(): output for target, output in zip(labels, results)}
         predictions = prepare_for_coco_detection(predictions)
+        if len(predictions) <= 0:
+            print("No predictions")
+            continue
         evaluator.update(predictions)
-    cm = evaluator.confusion_matrix
-    # Print the confusion matrix
-    print(cm)
     evaluator.synchronize_between_processes()
     evaluator.accumulate()
     evaluator.summarize()
@@ -87,7 +86,6 @@ def prepare_for_coco_detection(predictions):
         boxes = convert_to_xywh(boxes).tolist()
         scores = prediction["scores"].tolist()
         labels = prediction["labels"].tolist()
-
         coco_results.extend(
             [
                 {

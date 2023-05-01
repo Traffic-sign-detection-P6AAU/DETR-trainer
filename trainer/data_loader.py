@@ -19,19 +19,19 @@ def load_datasets(image_processor):
             self,
             image_directory_path: str,
             image_processor,
-            train: bool = True
+            train: bool
         ):
             annotation_file_path = os.path.join(image_directory_path, ANNOTATION_FILE_NAME)
             super(CocoDetection, self).__init__(image_directory_path, annotation_file_path)
             self.image_processor = image_processor
 
         def __getitem__(self, idx):
-            images, annotations = super(CocoDetection, self).__getitem__(idx)        
+            images, annotations = super(CocoDetection, self).__getitem__(idx)
             image_id = self.ids[idx]
             annotations = {'image_id': image_id, 'annotations': annotations}
-            encoding = self.image_processor(images=images, annotations=annotations, return_tensors='pt')
-            pixel_values = encoding['pixel_values'].squeeze()
-            target = encoding['labels'][0]
+            encoding = self.image_processor(images=images, annotations=annotations, return_tensors="pt")
+            pixel_values = encoding["pixel_values"].squeeze()
+            target = encoding["labels"][0]
 
             return pixel_values, target
 
@@ -61,18 +61,18 @@ def get_dataloaders(image_processor, train_dataset, val_dataset, test_dataset):
         # resolution in a given batch, and create a corresponding binary pixel_mask 
         # which indicates which pixels are real/which are padding
         pixel_values = [item[0] for item in batch]
-        encoding = image_processor.pad(pixel_values, return_tensors='pt')
+        encoding = image_processor.pad(pixel_values, return_tensors="pt")
         labels = [item[1] for item in batch]
         return {
             'pixel_values': encoding['pixel_values'],
             'pixel_mask': encoding['pixel_mask'],
             'labels': labels
         }
-
+    
     train_dataloader = make_dataloader(train_dataset, collate_fn, True)
     train_dataloader.shuffle = True
     val_dataloader = make_dataloader(val_dataset, collate_fn, True)
-    test_dataloader = DataLoader(dataset=test_dataset, collate_fn=collate_fn, batch_size=8)
+    test_dataloader = make_dataloader(test_dataset, collate_fn)
     return train_dataloader, val_dataloader, test_dataloader
 
 def make_dataloader(dataset, cool_fn, use_sampler=False):
