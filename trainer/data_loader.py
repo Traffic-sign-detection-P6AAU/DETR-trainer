@@ -29,9 +29,9 @@ def load_datasets(image_processor):
             images, annotations = super(CocoDetection, self).__getitem__(idx)
             image_id = self.ids[idx]
             annotations = {'image_id': image_id, 'annotations': annotations}
-            encoding = self.image_processor(images=images, annotations=annotations, return_tensors="pt")
-            pixel_values = encoding["pixel_values"].squeeze()
-            target = encoding["labels"][0]
+            encoding = self.image_processor(images=images, annotations=annotations, return_tensors='pt')
+            pixel_values = encoding['pixel_values'].squeeze()
+            target = encoding['labels'][0]
 
             return pixel_values, target
 
@@ -61,7 +61,7 @@ def get_dataloaders(image_processor, train_dataset, val_dataset, test_dataset):
         # resolution in a given batch, and create a corresponding binary pixel_mask 
         # which indicates which pixels are real/which are padding
         pixel_values = [item[0] for item in batch]
-        encoding = image_processor.pad(pixel_values, return_tensors="pt")
+        encoding = image_processor.pad(pixel_values, return_tensors='pt')
         labels = [item[1] for item in batch]
         return {
             'pixel_values': encoding['pixel_values'],

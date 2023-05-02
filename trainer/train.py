@@ -28,7 +28,7 @@ def start_training(train_dataloader, val_dataloader, test_dataloader, id2label):
     trainer.fit(model)
     model.eval()
     trainer.test(dataloaders=test_dataloader,
-                ckpt_path="best",
+                ckpt_path='best',
                 model=model)
     # Create a TensorBoard callback
     return model.to(DEVICE)
