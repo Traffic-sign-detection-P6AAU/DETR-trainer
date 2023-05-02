@@ -1,4 +1,4 @@
-from model.img_show import show_img_w_prediction
+from data_handler.img_show import show_img_w_prediction
 from data_handler.data_loader import load_datasets, get_dataloaders, get_id2label
 from model.train import start_training
 from model.def_model import save_model, get_model, get_img_processor
