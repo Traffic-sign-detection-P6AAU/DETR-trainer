@@ -1,6 +1,6 @@
 import torch
 import pytorch_lightning as pl
-from transformers import DetrForObjectDetection, DetrImageProcessor, DetrConfig
+from transformers import DetrForObjectDetection, DetrImageProcessor
 from trainer.settings import CHECKPOINT, MODEL_PATH
 
 class Detr(pl.LightningModule):

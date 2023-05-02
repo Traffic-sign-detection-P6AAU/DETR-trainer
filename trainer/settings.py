@@ -7,6 +7,6 @@ LEARN_RATE_BACKBONE = 0.00001 # Learning rate backbone
 WEIGHT_DECAY = 0.0001
 CONFIDENCE_TRESHOLD = 0.5
 IOU_TRESHOLD = 0.8
-MODEL_PATH = 'trained_model_version_0'
+MODEL_PATH = 'trained_model'
 NUM_WORKERS = 20 # Recommended to num of cores
 CHECKPOINT = 'facebook/detr-resnet-50'

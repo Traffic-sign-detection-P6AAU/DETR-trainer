@@ -69,9 +69,9 @@ def get_dataloaders(image_processor, train_dataset, val_dataset, test_dataset):
             'labels': labels
         }
     
-    train_dataloader = make_dataloader(train_dataset, collate_fn, True)
+    train_dataloader = make_dataloader(train_dataset, collate_fn)
     train_dataloader.shuffle = True
-    val_dataloader = make_dataloader(val_dataset, collate_fn, True)
+    val_dataloader = make_dataloader(val_dataset, collate_fn)
     test_dataloader = make_dataloader(test_dataset, collate_fn)
     return train_dataloader, val_dataloader, test_dataloader
 
