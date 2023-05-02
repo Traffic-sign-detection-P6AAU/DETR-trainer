@@ -1,5 +1,5 @@
 DATASET_PATH = '../Datasets/SpeedSignsForDkPrecise/'
-MAX_EPOCHS = 400
+MAX_EPOCHS = 250
 BATCH_SIZE = 8
 ACCUMULATE_GRAD_BATCHES = 10
 LEARN_RATE = 0.0001 # Learning rate

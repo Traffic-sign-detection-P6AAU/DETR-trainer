@@ -3,7 +3,7 @@ import os
 import torch
 import cv2
 import supervision as sv
-from trainer.settings import CONFIDENCE_TRESHOLD, IOU_TRESHOLD
+from settings import CONFIDENCE_TRESHOLD, IOU_TRESHOLD
 from data_handler.shared import load_json
 
 DEVICE = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')

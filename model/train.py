@@ -1,8 +1,8 @@
 import torch
 from pytorch_lightning import Trainer
 from pytorch_lightning.loggers import TensorBoardLogger
-from trainer.model import Detr
-from trainer.settings import MAX_EPOCHS, LEARN_RATE, LEARN_RATE_BACKBONE, ACCUMULATE_GRAD_BATCHES, WEIGHT_DECAY
+from model.def_model import Detr
+from settings import MAX_EPOCHS, LEARN_RATE, LEARN_RATE_BACKBONE, ACCUMULATE_GRAD_BATCHES, WEIGHT_DECAY
 
 DEVICE = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     

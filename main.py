@@ -1,12 +1,9 @@
-import torch
-from trainer.img_show import show_img_w_prediction, show_model_prediction
-from trainer.data_loader import load_datasets, get_dataloaders, get_id2label
-from trainer.train import start_training
-from trainer.model import save_model, get_model, get_img_processor
-from trainer.settings import MODEL_PATH
-from data_handler.data_split import split_dataset
-from data_handler.data_labeler import extend_annotations
-from evaluation.evaluate_test_data import evaluate_on_test_data, evaluate_accuracy
+from model.img_show import show_img_w_prediction
+from data_handler.data_loader import load_datasets, get_dataloaders, get_id2label
+from model.train import start_training
+from model.def_model import save_model, get_model, get_img_processor
+from settings import MODEL_PATH
+from evaluation.evaluate_test_data import evaluate_on_test_data
 
 CATEGORIES_PATH = 'data_handler/categories.json'
 
@@ -14,8 +11,6 @@ def main():
     print('---Menu list---')
     print('Type: 1 to train the model')
     print('Type: 2 to use the model')
-    print('Type: 3 to split dataset')
-    print('Type: 4 to extend the labels')
     choice = input()
     if choice == '1':
         image_processor = get_img_processor()
@@ -28,12 +23,8 @@ def main():
         image_processor = get_img_processor()
         model = get_model(MODEL_PATH)
         show_img_w_prediction(image_processor, model, CATEGORIES_PATH)
-    elif choice == '3':
-        split_dataset(CATEGORIES_PATH)
-    elif choice == '4':
-        extend_annotations()
     else:
-        print('Input was not 1, 2, 3 or 4.')
+        print('Input was not 1 or 2.')
 
 if __name__ == '__main__':
     main()
