@@ -1,5 +1,5 @@
 import torch
-#from coco_eval import CocoEvaluator
+from coco_eval import CocoEvaluator
 from tqdm.notebook import tqdm
 import os
 import cv2
