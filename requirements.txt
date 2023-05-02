@@ -1,9 +1,10 @@
 #Installation command: pip install --no-cache-dir --upgrade -r requirements.txt
+numpy
 transformers
 opencv-python
 pyqt5
 matplotlib
-numpy
-supervision
+supervision==0.3.0
 pytorch_lightning
 timm
+coco_eval

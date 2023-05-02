@@ -19,14 +19,14 @@ def load_datasets(image_processor):
             self,
             image_directory_path: str,
             image_processor,
-            train: bool = True
+            train: bool
         ):
             annotation_file_path = os.path.join(image_directory_path, ANNOTATION_FILE_NAME)
             super(CocoDetection, self).__init__(image_directory_path, annotation_file_path)
             self.image_processor = image_processor
 
         def __getitem__(self, idx):
-            images, annotations = super(CocoDetection, self).__getitem__(idx)        
+            images, annotations = super(CocoDetection, self).__getitem__(idx)
             image_id = self.ids[idx]
             annotations = {'image_id': image_id, 'annotations': annotations}
             encoding = self.image_processor(images=images, annotations=annotations, return_tensors='pt')
@@ -68,10 +68,10 @@ def get_dataloaders(image_processor, train_dataset, val_dataset, test_dataset):
             'pixel_mask': encoding['pixel_mask'],
             'labels': labels
         }
-
-    train_dataloader = make_dataloader(train_dataset, collate_fn, True)
+    
+    train_dataloader = make_dataloader(train_dataset, collate_fn)
     train_dataloader.shuffle = True
-    val_dataloader = make_dataloader(val_dataset, collate_fn, True)
+    val_dataloader = make_dataloader(val_dataset, collate_fn)
     test_dataloader = make_dataloader(test_dataset, collate_fn)
     return train_dataloader, val_dataloader, test_dataloader
 
@@ -79,18 +79,21 @@ def make_dataloader(dataset, cool_fn, use_sampler=False):
     sampler = None
     if use_sampler:
         # https://stackoverflow.com/questions/60812032/using-weightedrandomsampler-in-pytorch
-        count = [0]*(len(dataset.coco.cats))
-        count[0] = 1 # to avoid division by zero
-        dataset.coco.imgToAnns
+        num_cats = len(dataset.coco.cats)
+        num_imgs = len(dataset.coco.imgs)
+        count = [0]*num_cats
         for ann in dataset.coco.imgToAnns.values():
             for a in ann:
                 count[a['category_id']] += 1
-        num_samples = len(count)
-        labels = list(dataset.coco.cats.keys())
-        class_weights = [num_samples/count[i] for i in range(len(count))]
-        weights = [class_weights[labels[i]] for i in range(int(num_samples))]
-        weights[0] = 0 # to skip category 0
-        sampler = WeightedRandomSampler(DoubleTensor(weights), int(num_samples))
+        weights = []
+        for i in range(num_cats):
+            if count[i] == 0:
+                print('{} (id: {}) has no samples'.format(dataset.coco.cats[i]['name'], i))
+                weights.append(0)
+            else:
+                weights.append(1/count[i])
+        print('\n') # to separate the output from the previous print
+        sampler = WeightedRandomSampler(weights=DoubleTensor(weights), num_samples=num_imgs, replacement=True)
 
     return DataLoader(
         dataset=dataset,

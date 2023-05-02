@@ -6,7 +6,6 @@ from trainer.settings import CHECKPOINT, MODEL_PATH
 class Detr(pl.LightningModule):
     def __init__(self, lr, lr_backbone, weight_decay, train_load, val_load, id2label):
         super().__init__()
-
         self.model = DetrForObjectDetection.from_pretrained(
             pretrained_model_name_or_path=CHECKPOINT,
             num_labels=len(id2label),
@@ -34,7 +33,7 @@ class Detr(pl.LightningModule):
         return loss, loss_dict
 
     def training_step(self, batch, batch_idx):
-        loss, loss_dict = self.common_step(batch, batch_idx)     
+        loss, loss_dict = self.common_step(batch, batch_idx)
         # logs metrics for each training_step, and the average across the epoch
         self.log('training_loss', loss)
         for k,v in loss_dict.items():
@@ -47,7 +46,15 @@ class Detr(pl.LightningModule):
         self.log('validation/loss', loss)
         for k, v in loss_dict.items():
             self.log('validation_' + k, v.item())
-            
+
+        return loss
+    
+    def test_step(self, batch, batch_idx):
+        loss, loss_dict = self.common_step(batch, batch_idx)     
+        self.log('test/loss', loss)
+        for k, v in loss_dict.items():
+            self.log('test_' + k, v.item())
+
         return loss
 
     def configure_optimizers(self):
