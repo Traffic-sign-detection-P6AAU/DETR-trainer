@@ -2,7 +2,7 @@ import torch
 from pytorch_lightning import Trainer
 from pytorch_lightning.loggers import TensorBoardLogger
 from model.def_model import Detr
-from settings import MAX_EPOCHS, LEARN_RATE, LEARN_RATE_BACKBONE, ACCUMULATE_GRAD_BATCHES, WEIGHT_DECAY
+from settings import MAX_EPOCHS, LEARN_RATE, LEARN_RATE_BACKBONE, ACCUMULATE_GRAD_BATCHES, WEIGHT_DECAY, GRADIENT_CLIP
 
 DEVICE = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     
@@ -21,7 +21,7 @@ def start_training(train_dataloader, val_dataloader, test_dataloader, id2label):
                       accelerator='gpu',
                       logger=logger,
                       max_epochs=MAX_EPOCHS,
-                      gradient_clip_val=0.1,
+                      gradient_clip_val=GRADIENT_CLIP,
                       accumulate_grad_batches=ACCUMULATE_GRAD_BATCHES,
                       log_every_n_steps=1)
     torch.set_float32_matmul_precision('high')

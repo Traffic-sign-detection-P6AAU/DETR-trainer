@@ -13,7 +13,7 @@ def show_img_w_prediction(image_processor, model, categories_path): # disable gr
     with torch.no_grad():
 
         # load image and predict
-        image = cv2.imread('../Datasets/google_maps/test3.jpg')
+        image = cv2.imread('../Datasets/google_maps/image3.png')
         inputs = image_processor(images=image, return_tensors='pt').to(device)
         outputs = model(**inputs)
 
