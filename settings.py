@@ -1,4 +1,4 @@
-DATASET_PATH = '../Datasets/SpeedSignsForDkPrecise/'
+DATASET_PATH = 'Datasets/SpeedSignsForDkPrecise/'
 MAX_EPOCHS = 250
 BATCH_SIZE = 8
 ACCUMULATE_GRAD_BATCHES = 10

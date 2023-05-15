@@ -7,7 +7,7 @@ class Detr(pl.LightningModule):
     def __init__(self, lr, lr_backbone, weight_decay, train_load, val_load, id2label):
         super().__init__()
         self.model = DetrForObjectDetection.from_pretrained(
-            pretrained_model_name_or_path=CHECKPOINT,
+            pretrained_model_name_or_path="checkpoint0299.pth",
             num_labels=len(id2label),
             ignore_mismatched_sizes=True
         )
