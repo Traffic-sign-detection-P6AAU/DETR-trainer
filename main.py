@@ -10,7 +10,8 @@ CATEGORIES_PATH = 'data_handler/categories.json'
 def main():
     print('---Menu list---')
     print('Type: 1 to train the model')
-    print('Type: 2 to use the model')
+    print('Type: 2 to evaluate the model')
+    print('Type: 3 to use the model')
     choice = input()
     if choice == '1':
         image_processor = get_img_processor()
@@ -22,9 +23,15 @@ def main():
     elif choice == '2':
         image_processor = get_img_processor()
         model = get_model(MODEL_PATH)
+        train_dataset, val_dataset, test_dataset = load_datasets(image_processor)
+        test_dataloader = get_dataloaders(image_processor, train_dataset, val_dataset, test_dataset)[2]
+        evaluate_on_test_data(model, test_dataloader, test_dataset)
+    elif choice == '3':
+        image_processor = get_img_processor()
+        model = get_model(MODEL_PATH)
         show_img_w_prediction(image_processor, model, CATEGORIES_PATH)
     else:
-        print('Input was not 1 or 2.')
+        print('Input was not 1, 2 or 3.')
 
 if __name__ == '__main__':
     main()
