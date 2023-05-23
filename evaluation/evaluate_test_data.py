@@ -4,8 +4,8 @@ from tqdm.notebook import tqdm
 import os
 import cv2
 import supervision as sv
-from trainer.model import get_img_processor
-from trainer.settings import CONFIDENCE_TRESHOLD, IOU_TRESHOLD
+from model.def_model import get_img_processor
+from settings import CONFIDENCE_TRESHOLD, IOU_TRESHOLD
 
 def evaluate_accuracy(model, test_dataset):
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')

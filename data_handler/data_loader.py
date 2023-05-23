@@ -1,11 +1,8 @@
 import os
-import random
 from torch import DoubleTensor
 import torchvision
-import cv2
-import supervision as sv
 from torch.utils.data import DataLoader
-from trainer.settings import DATASET_PATH, BATCH_SIZE, NUM_WORKERS
+from settings import DATASET_PATH, BATCH_SIZE, NUM_WORKERS
 from torch.utils.data.sampler import WeightedRandomSampler
 # settings
 ANNOTATION_FILE_NAME = '_annotations.coco.json'
@@ -102,33 +99,6 @@ def make_dataloader(dataset, cool_fn, use_sampler=False):
         num_workers=NUM_WORKERS,
         batch_size=BATCH_SIZE,
         sampler=sampler)
-
-def show_img_from_data(train_dataset, test_dataset):
-    # select random image
-    image_ids = test_dataset.coco.getImgIds()
-    image_id = random.choice(image_ids)
-    print('Image #{}'.format(image_id))
-
-    # load image and annotatons 
-    image = test_dataset.coco.loadImgs(image_id)[0]
-    annotations = train_dataset.coco.imgToAnns[image_id]
-    image_path = os.path.join(train_dataset.root, image['file_name'])
-    image = cv2.imread(image_path)
-
-    # annotate
-    detections = sv.Detections.from_coco_annotations(coco_annotation=annotations)
-
-    # we will use id2label function for training
-    labels = [
-        f'{get_id2label(train_dataset)[class_id]}' 
-        for _, _, class_id, _
-        in detections
-    ]
-
-    box_annotator = sv.BoxAnnotator()
-    frame = box_annotator.annotate(scene=image, detections=detections, labels=labels)
-
-    sv.show_frame_in_notebook(image, (16, 16))
 
 def get_id2label(train_dataset):
     categories = train_dataset.coco.cats

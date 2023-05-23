@@ -92,21 +92,11 @@
         },
         {
             "id": 18,
-            "name": "speed-80",
-            "supercategory": "speed-signs"
-        },
-        {
-            "id": 19,
-            "name": "speed-80-ending",
-            "supercategory": "speed-signs"
-        },
-        {
-            "id": 20,
             "name": "speed-90",
             "supercategory": "speed-signs"
         },
         {
-            "id": 21,
+            "id": 19,
             "name": "speed-90-ending",
             "supercategory": "speed-signs"
         }
